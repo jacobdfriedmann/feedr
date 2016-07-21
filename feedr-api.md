@@ -1,8 +1,10 @@
 # Feedr API
 
-## POST /login
+## Login Resource
 
-### Request Body
+### *POST /login*
+
+#### Request Body
 
 ```json
 {
@@ -10,7 +12,7 @@
 }
 ```
 
-### Response Body
+#### Response Body
 
 ```json
 {
@@ -18,15 +20,17 @@
 }
 ```
 
---
+---
 
-## GET /interests
+## Interests Resource
 
-### Parameters
+### *GET /interests*
+
+#### Parameters
 
 *userId* (Number) - the id for the personalized feed
 
-### Response Body
+#### Response Body
 
 ```json
 [
@@ -38,17 +42,17 @@
 
 --
 
-## POST /interests/:interest
+### *POST /interests/:interest*
 
-### Path
+#### Path
 
 *:interest* (String) - An interest string (i.e. science).
 
-### Parameters
+#### Parameters
 
 *userId* (Number) - the id for the interest.
 
-### Response Body
+#### Response Body
 
 ```json
 [
@@ -59,13 +63,13 @@
 
 --
 
-## PUT /interests
+### *PUT /interests*
 
-### Parameters
+#### Parameters
 
 *userId* (Number) - the id for the interest.
 
-### Request Body
+#### Request Body
 
 ```json
 [
@@ -75,7 +79,7 @@
 ]
 ```
 
-### Response Body
+#### Response Body
 
 ```json
 [
@@ -87,97 +91,163 @@
 
 --
 
-## GET /feed
+### *DELETE /interests/:interest*
+
+#### Path
+
+*:interest* (String) - An interest string to be removed (i.e. science).
+
+#### Parameters
+
+*userId* (Number) - the id for the interest.
+
+#### Response Body
+
+```json
+[
+  "politics"
+]
+```
+
+---
+
+## Categories Resource
+
+### *GET /categories*
 
 ### Parameters
 
-*userId* (Number) - the id for the personalized feed
+*userId* (Number) - the user id for the categories
 
 ### Response Body
 
 ```json
 [
   {
+    "name":"entertainment",
+    "selected":false
+  },
+  {
+    "name":"lifestyle",
+    "selected":true
+  },
+  {
+    "name":"world",
+    "selected":true
+  }
+]
+```
+
+---
+
+## Feed Resource
+
+### *GET /feed*
+
+#### Parameters
+
+*userId* (Number) - the user id for the personalized feed
+
+#### Response Body
+
+```json
+[
+  {
+    "id": -595284414,
     "title": "My Article",
     "url": "http://example.com",
     "imageUrl": "http://example.com/feature.png",
     "description": "This is an article about the world",
     "category": "science",
+    "date": "2016-07-21T11:08:24.000Z",
+    "source": "Mashable",
     "bookmarked": false
   }
 ]
 ```
 
---
+---
 
-## GET /bookmarks
+## Bookmarks Resource
 
-### Parameters
+### *GET /bookmarks*
+
+#### Parameters
 
 *userId* (Number) - the id for the bookmark
 
-### Response Body
+#### Response Body
 
 ```json
 [
-  {
-    "title": "My Article",
-    "url": "http://example.com",
-    "imageUrl": "http://example.com/feature.png",
-    "description": "This is an article about the world",
-    "bookmarked": true
-  }
+  -595284414,
+  8782376173
 ]
 ```
 
 --
 
-## POST /bookmarks/:url
+### *POST /bookmarks/:id*
 
-### Path
+#### Path
 
-*:url* (String) - the url that the user wants to bookmark
+*:id* (Number) - the article id to bookmark
 
-### Parameters
+#### Parameters
 
 *userId* (Number) - the id for the bookmark
 
-### Response Body
+#### Response Body
 
 ```json
 [
-  {
-    "title": "My Article",
-    "url": "http://example.com",
-    "imageUrl": "http://example.com/feature.png",
-    "description": "This is an article about the world",
-    "bookmarked": true
-  }
+  -595284414,
+  8782376173
 ]
 ```
 
 --
 
-## DELETE /bookmarks/:url
+### *PUT /bookmarks*
 
-### Path
-
-*:url* (String) - the url of the bookmark that the user wants to delete
-
-### Parameters
+#### Parameters
 
 *userId* (Number) - the id for the bookmark
 
-### Response Body
+#### Request Body
 
 ```json
 [
-  {
-    "title": "My Article",
-    "url": "http://example.com",
-    "imageUrl": "http://example.com/feature.png",
-    "description": "This is an article about the world",
-    "bookmarked": true
-  }
+  -595284414,
+  8782376173
+]
+```
+
+#### Response Body
+
+```json
+[
+  -595284414,
+  8782376173
+]
+```
+
+--
+
+### *DELETE /bookmarks/:id*
+
+#### Path
+
+*:url* (Number) - the article id to un-bookmark
+
+#### Parameters
+
+*userId* (Number) - the id for the bookmark
+
+#### Response Body
+
+```json
+[
+  -595284414
 ]
 ```

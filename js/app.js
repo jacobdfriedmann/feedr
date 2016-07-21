@@ -42,7 +42,7 @@ $(document).ready(function() {
 
   function handleLogin() {
     var username = $('#username').val();
-    $.post(baseURL + '/login', { username: username }, function (data) {
+    $.post('/login', { username: username }, function (data) {
       model.loggedIn = true;
       model.userId = data.userId;
       model.username = username;
@@ -54,7 +54,7 @@ $(document).ready(function() {
   }
 
   function loadCategories() {
-    $.get(baseURL + '/categories?userId=' + model.userId, function (data) {
+    $.get('/categories?userId=' + model.userId, function (data) {
       model.categories = data;
 
       renderCategories();
@@ -62,7 +62,7 @@ $(document).ready(function() {
   }
 
   function loadArticles() {
-    $.get(baseURL + '/feed?userId=' + model.userId, function (data) {
+    $.get('/feed?userId=' + model.userId, function (data) {
       model.articles = data;
 
       renderArticles();
@@ -72,14 +72,14 @@ $(document).ready(function() {
   function handleToggleCategory() {
     var category = $(this).text();
     if ($(this).hasClass('label-default')) {
-      $.post(baseURL + '/interests/' + category + '?userId=' + model.userId, function (data) {
+      $.post('/interests/' + category + '?userId=' + model.userId, function (data) {
         loadCategories();
         loadArticles();
       });
     } else {
       $.ajax({
         type: 'DELETE',
-        url: baseURL + '/interests/' + category + '?userId=' + model.userId,
+        url: '/interests/' + category + '?userId=' + model.userId,
         success: function (data) {
           loadCategories();
           loadArticles();
@@ -95,13 +95,13 @@ $(document).ready(function() {
     var bookmarked = article.bookmarked;
 
     if (!bookmarked) {
-      $.post(baseURL + '/bookmarks/' + articleId + '?userId=' + model.userId, function (data) {
+      $.post('/bookmarks/' + articleId + '?userId=' + model.userId, function (data) {
         loadArticles();
       });
     } else {
       $.ajax({
         type: 'DELETE',
-        url: baseURL + '/bookmarks/' + articleId + '?userId=' + model.userId,
+        url: '/bookmarks/' + articleId + '?userId=' + model.userId,
         success: function (data) {
           loadArticles();
         }
