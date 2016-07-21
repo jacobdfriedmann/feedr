@@ -14,7 +14,7 @@
 
 ```json
 {
-  "id": 21
+  "userId": 21
 }
 ```
 
@@ -102,6 +102,7 @@
     "url": "http://example.com",
     "imageUrl": "http://example.com/feature.png",
     "description": "This is an article about the world",
+    "category": "science",
     "bookmarked": false
   }
 ]
