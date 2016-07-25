@@ -22,6 +22,7 @@
           </section>
         </header>
 
+
         <section id="categories" class="container">
         </section>
 
@@ -34,12 +35,10 @@
         <script id="login-template" type="text/x-handlebars-template">
           {{#if loggedIn}}
             <span class="username">{{username}}</span>
+            <button type="submit" class="btn btn-default" id="logoutGoogle">Logout</button>
           {{else}}
             <div class="form-inline">
-              <div class="form-group">
-                <input type="text" class="form-control" id="username" placeholder="Username">
-              </div>
-              <button type="submit" class="btn btn-default" id="loginSubmit">Login</button>
+              <button type="submit" class="btn btn-default" id="loginGoogle">Login With Google</button>
             </div>
           {{/if}}
         </script>
@@ -74,5 +73,6 @@
             {{/each}}
           {{/if}}
         </script>
+        <script src="https://apis.google.com/js/api.js?onload=handleGoogleClientLoad"></script>
     </body>
 </html>
