@@ -20,6 +20,25 @@ Your final product will be a living, breathing Single Page Application!
 
 ---
 
+## Getting Started
+
+1. Try to turn the static HTML into a templated View.
+2. Try to create a Model with mock data to hand to your View.
+3. Finally, create event listeners and make ajax calls to tie into the AJAX API.
+
+---
+
+## OAuth
+
+Once we have the basic application working, we'll add OAuth authentication using Facebook as a OAuth provider. To do this we'll need to:
+
+1. Register a Facebook application
+2. Add the Facebook script tag to the HTML page
+3. Add the Facebook login function
+4. Add an event listener function for the Facebook login that sends the retrieved access code to the `login-facebook` endpoint.
+
+---
+
 ## Setup
 
 ### Fork/Clone the Repo
