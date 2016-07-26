@@ -1,23 +1,3 @@
-var apiKey = 'AIzaSyDRTXMhmEXbSGuIAzWFwpP4eIQTIyNSnSc';
-var clientId = '563107140751-a15af7rpl8nu88i5srh1vgcb8r54u6uh.apps.googleusercontent.com';
-var scopes = 'profile';
-var auth2;
-
-function handleGoogleClientLoad() {
-  gapi.load('client:auth2', function() {
-    gapi.client.setApiKey(apiKey);
-    gapi.auth2.init({
-        client_id: clientId,
-        scope: scopes
-    }).then(function () {
-      auth2 = gapi.auth2.getAuthInstance();
-      auth2.isSignedIn.listen(handleGoogleLoginComplete);
-      handleGoogleLoginComplete(auth2.isSignedIn.get())
-    });
-  });
-}
-
-
 var model = {
   loggedIn: false,
   userId: undefined,
@@ -53,53 +33,23 @@ function renderArticles() {
 function setup() {
   renderLogin();
 
-  window.handleGoogleClientLoad = handleGoogleClientLoad;
-
-  $('#loginContainer').on('click', '#loginGoogle', handleGoogleLogin);
-  $('#loginContainer').on('click', '#logoutGoogle', handleGoogleLogout);
   $('#categories').on('click', '.label', handleToggleCategory);
   $('#main').on('click', 'article', handleToggleBookmark);
 }
 
-function handleGoogleLogin() {
-  auth2.signIn();
+function loginFacebook() {
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      handleLogin(response.authResponse.accessToken);
+    }
+  });
 }
 
-function handleGoogleLogout() {
-  auth2.signOut();
-}
-
-function handleGoogleLoginComplete(isSignedIn) {
-  if (isSignedIn) {
-    gapi.client.load('people', 'v1', function() {
-      var request = gapi.client.people.people.get({
-        resourceName: 'people/me'
-      });
-      request.execute(function(resp) {
-        var googleId = resp.metadata.sources[0].id;
-        var googleName = resp.names[0].displayName;
-        handleLogin(googleId, googleName);
-      });
-    });
-  } else {
-    model = {
-      loggedIn: false,
-      userId: undefined,
-      username: undefined,
-      categories: undefined,
-      articles: undefined
-    };
-    renderLogin();
-    renderCategories();
-    renderArticles();
-  }
-}
-
-function handleLogin(googleId, username) {
-  $.post('/login', { username: googleId }, function (data) {
+function handleLogin(access_token) {
+  $.post('/login-facebook', { access_token: access_token }, function (data) {
     model.loggedIn = true;
     model.userId = data.userId;
-    model.username = username;
+    model.username = data.username;
 
     loadCategories();
     loadArticles();

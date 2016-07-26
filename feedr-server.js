@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var jsonfile = require('jsonfile');
 var schedule = require('node-schedule');
+var FB = require('fb');
 var app = express();
 var port = 3010;
 
@@ -166,7 +167,6 @@ app.use(function(req, res, next) {
 
 app.post('/login', function (request, response) {
   var username = request.body.username;
-  console.log(request);
 
   // If no username provided, give a 400 response
   if (!username) {
@@ -183,6 +183,31 @@ app.post('/login', function (request, response) {
   // Send response
   response.json({
     userId: userId
+  });
+});
+
+app.post('/login-facebook', function (request, response) {
+  var access_token = request.body.access_token;
+
+  // If no username provided, give a 400 response
+  if (!access_token) {
+    return response.sendStatus(400);
+  }
+
+  FB.api('me', { fields: ['id', 'name'], access_token: access_token }, function (res) {
+    console.log(res);
+    // Look up or create user
+    var userId = users[res.id];
+    if (!userId) {
+      users[res.id] = Date.now().toString().substr(-4);
+      userId = users[res.id];
+    }
+
+    // Send response
+    response.json({
+      userId: userId,
+      username: res.name
+    });
   });
 });
 
