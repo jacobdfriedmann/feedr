@@ -20,6 +20,27 @@
 }
 ```
 
+--
+
+### *POST /login-facebook*
+
+#### Request Body
+
+```json
+{
+  "access_token": "123n1kh1g312v3b1v3v"
+}
+```
+
+#### Response Body
+
+```json
+{
+  "userId": 21,
+  "username": "John Doe"
+}
+```
+
 ---
 
 ## Interests Resource
