@@ -1,3 +1,19 @@
+<!-- Getting Started
+
+Try to turn the static HTML into a templated View.
+Try to create a Model with mock data to hand to your View.
+Finally, create event listeners and make ajax calls to tie into the AJAX API.
+
+OAuth
+Once we have the basic application working, we'll add OAuth authentication using Facebook as a OAuth provider. To do this we'll need to:
+
+Register a Facebook application
+Add the Facebook script tag to the HTML page
+Add the Facebook login function
+Add an event listener function for the Facebook login that sends the retrieved access code to the login-facebook endpoint. -->
+
+
+
 <!doctype html>
 <html>
 
@@ -13,126 +29,61 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
-    <body>
-      <header>
-        <section class="container">
-          <a href="#"><h1>Feedr</h1></a>
-          <nav id="loginContainer">
-            <span class="username">jacob</span>
-            <!-- If not logged in -->
-            <!-- <div class="form-inline">
-              <div class="form-group">
-                <input type="text" class="form-control" id="username" placeholder="Username">
-              </div>
-              <button type="submit" class="btn btn-default" id="loginSubmit">Login</button>
-            </div> -->
-          </nav>
+      <body>
+        <header>
+          <section class="container">
+            <a href="#"><h1>Feedr</h1></a>
+            <nav id="loginContainer">
+              <span class="username">jacob</span>
+              <!-- If not logged in -->
+              <!-- <div class="form-inline">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="username" placeholder="Username">
+                </div>
+                <button type="submit" class="btn btn-default" id="loginSubmit">Login</button>
+              </div> -->
+            </nav>
+          </section>
+        </header>
+
+        <section id="categories" class="container">
+              <span id="long-form"class="label label-default">long-form</span>
+              <span id="entertainment" class="label label-primary">entertainment</span>
+              <span id="world" class="label label-default">world</span>
+              <span id="politics" class="label label-default">politics</span>
+              <span id="science" class="label label-default">science</span>
+              <span id="sports" class="label label-default">sports</span>
+              <span id="tech" class="label label-default">tech</span>
+              <span id="food" class="label label-default">food</span>
+              <span id="drugs" class="label label-default">drugs</span>
+              <span id="music" class="label label-default">music</span>
+              <span id="lifestyle" class="label label-default">lifestyle</span>
         </section>
-      </header>
 
-      <section id="categories" class="container">
-            <span class="label label-default">long-form</span>
-            <span class="label label-primary">entertainment</span>
-            <span class="label label-primary">world</span>
-            <span class="label label-default">politics</span>
-            <span class="label label-default">science</span>
-            <span class="label label-default">sports</span>
-            <span class="label label-primary">tech</span>
-            <span class="label label-default">food</span>
-            <span class="label label-default">drugs</span>
-            <span class="label label-default">music</span>
-            <span class="label label-default">lifestyle</span>
-      </section>
+        <section id="main" class="container">
+          
+        </section>
 
-      <section id="main" class="container">
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/wB2HLbw1XpLwzQBnaQivWm-KD_4=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15170%2Fsddefault.jpg">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/21/cheap-thrills-veena-cover/"><h3>Indian musician sisters give Sia's 'Cheap Thrills' a soulful instrumental remix</h3></a>
-              <h6><span class="label label-primary">entertainment</span></h6>
-              <p>"Cheap Thrills" like you've never heard before.</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-            <span class="label label-primary">bookmarked</span>
-          </section>
-        </article>
-
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/oQhKgVnMa2N21c9_kiNC7j4mOeQ=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15172%2Fdefault.jpg">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/21/paul-mccartney-concert-in-360-degrees/"><h3>Watch Paul McCartney rock out to 'Live and Let Die' — in 360 degrees</h3></a>
-              <h6><span class="label label-primary">entertainment</span></h6>
-              <p>Couldn't make the show? Now, you can.</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-          </section>
-        </article>
-
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/TWroWKGSsxWu7jC7syIixxtKD30=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F151790%2F32b6b16a25574f72b434ed0422057ff4.png">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/20/ww1-chatbot-australia/"><h3>Interactive chatbot lets you speak in real-time with a World War I soldier</h3></a>
-              <h6><span class="label label-primary">tech</span></h6>
-              <p>Chat with Archie Barwick as he fights in World War I.</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-          </section>
-        </article>
-
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/RQLZgtl_P4d7B3UGkEHSETM_AK8=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F151985%2Fhttps-_2F_2Fblueprint-api-production.s3.amazonaws.com_2Fuploads_2Fcard_2Fimage_2F32034_2FNEtr5EjnjOXdwA_1_a.jpg">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/21/lionsgate-divergent-series-final-movie-tv-series/"><h3>Final 'Divergent' movie may skip the big screen</h3></a>
-              <h6><span class="label label-primary">entertainment</span></h6>
-              <p>The studio wants to wrap up the film series on the small screen, reports say.</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-            <span class="label label-primary">bookmarked</span>
-          </section>
-        </article>
-
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/qSwzoAgsMSJbfaSuY5dj_JKaLAM=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F150784%2Flisten-to-me.jpg">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/20/listen-to-me-mashreads-podcast/"><h3>MashReads Podcast: 'Listen to Me' takes you on the road trip from your nightmares</h3></a>
-              <h6><span class="label label-primary">entertainment</span></h6>
-              <p>Buckle up!</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-          </section>
-        </article>
-
-        <article class="article row">
-          <section class="featuredImage col-sm-2">
-            <img src="http://i.amz.mshcdn.com/L_9u_4ZUmVyyh4UmK7mdFUCRxRc=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15058%2Fe082211bc6dd4805955737eb42cb3037.png">
-          </section>
-          <section class="articleContent col-sm-8">
-              <a target="_blank" href="http://mashable.com/2016/07/20/tiffany-trump-pop-song/"><h3>Anyway, here's Tiffany Trump's pop song</h3></a>
-              <h6><span class="label label-primary">entertainment</span></h6>
-              <p>Back in 2011, when a Donald Trump presidency was just just a daydream in his head, daughter Tiffany Trump had a different dream: To make pop music.</p>
-          </section>
-          <section class="source col-sm-2">
-            Mashable<br>
-          </section>
-        </article>
-      </section>
-
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-      <script src="js/app.js"></script>
-</body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+        <script id="article-template" type="text/x-handlebars-template">
+          {{#each articles}}
+              <article class="article row">
+              <section class="featuredImage col-sm-2">
+                <img src={{image}}>
+              </section>
+              <section class="articleContent col-sm-8">
+                  <a target="_blank" href={{link}}><h3>{{title}}</h3></a>
+                  <h6><span class="label label-primary">{{type}}</span></h6>
+                  <p>{{summary}}</p>
+              </section>
+              <section class="source col-sm-2">
+                Mashable<br>
+                <span class="label label-primary">bookmarked</span>
+              </section>
+            </article>
+         {{/each}} 
+        </script>
+        <script src="js/app.js"></script>
+    </body>
 </html>
