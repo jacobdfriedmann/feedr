@@ -60,6 +60,8 @@ function login() {
     model.loggedIn = true;
 
     // Load categories and feed for this user, rerender
+    loadCategories();
+    loadArticles();
   });
 }
 
@@ -73,14 +75,25 @@ function toggleInterest() {
       type: 'DELETE',
       url: url,
       success: function() {
-        // update categories and feed, rerender
+        // load updated categories and feed, rerender
       }
     });
   } else {
     $.post(url, function() {
-      // update categories and feed, rerender
+      // load updated categories and feed, rerender
     });
   }
+}
+
+function loadCategories() {
+  $.get('/categories?userId=' + model.userId, function(data) {
+    model.categories = data;
+    renderCategories();
+  });
+}
+
+function loadArticles() {
+  // TODO
 }
 
 $(document).ready(setup);
