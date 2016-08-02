@@ -2,67 +2,70 @@
 var user = {
     loggedin: false,
     id: '',
-    name: 'jacob'
+    name: ''
 }
-var categories = [
+/*var categories = [
     {
-        category: 'long-form',
-        status: 'default'
+        name: 'long-form',
+        selected: false
     },
     {
-        category: 'entertainment',
-        status: 'primary'
+        name: 'entertainment',
+        selected: true
     },
     {
-        category: 'world',
-        status: 'primary'
+        name: 'world',
+        selected: true
     },
     {
-        category: 'politics',
-		status: 'default'
+        name: 'politics',
+		selected: false
     },
     {
-        category: 'science',
-		status: 'default'
+        name: 'science',
+		selected: false
     },
     {
-        category: 'sports',
-		status: 'default'
+        name: 'sports',
+		selected: false
     },
     {
-        category: 'tech',
-		status: 'primary'
+        name: 'tech',
+		selected: true
     },
     {
-        category: 'food',
-		status: 'default'
+        name: 'food',
+		selected: false
     },
     {
-        category: 'drugs',
-		status: 'default'
+        name: 'drugs',
+		selected: false
     },
     {
-        category: 'music',
-		status: 'default'
+        name: 'music',
+		selected: false
     },
     {
-        category: 'lifestyle',
-		status: 'default'
+        name: 'lifestyle',
+		selected: false
     }
     ];
 var articles = [
     {
-        image: 'http://i.amz.mshcdn.com/L_9u_4ZUmVyyh4UmK7mdFUCRxRc=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15058%2Fe082211bc6dd4805955737eb42cb3037.png',
-        url: 'http://mashable.com/2016/07/20/tiffany-trump-pop-song/',
+        id: '',
         title: 'Anyway, here\'s Tiffany Trump\'s pop song',
-        text: 'Back in 2011, when a Donald Trump presidency was just just a daydream in his head, daughter Tiffany Trump had a different dream: To make pop music.',
+        url: 'http://mashable.com/2016/07/20/tiffany-trump-pop-song/',
+        imageUrl: 'http://i.amz.mshcdn.com/L_9u_4ZUmVyyh4UmK7mdFUCRxRc=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15058%2Fe082211bc6dd4805955737eb42cb3037.png',
+        description: 'Back in 2011, when a Donald Trump presidency was just just a daydream in his head, daughter Tiffany Trump had a different dream: To make pop music.',
         category: 'entertainment',
+        date: '',
         source: 'Mashable',
         bookmarked: true
     }
-];
+];*/
 
 // View
+var loginTemplate;
 var categoriesTemplate;
 var articlesTemplate;
 
@@ -84,18 +87,100 @@ $(document).ready(function () {
 function renderView() {
     $('#loginContainer').html(loginTemplate(user));
 
-    //$('#categories').empty();
-    //categories.forEach(function(cat){
-        $('#categories').html(categoriesTemplate(categories));
-    //});
+    $('#categories').html(categoriesTemplate(categories));
 
-    //$('#articles').empty();
-    //articles.forEach(function(art){
-        $('#articles').append(articlesTemplate(articles));
-    //});
+    $('#articles').html(articlesTemplate(articles));
 }
 
 // Controller
-document.ready(function() {
+$(document).ready(function() {
+    $('#loginContainer').on('click', 'button', function(){
+        var username = $('#username').val();
 
+        var url = 'http://localhost:3010/login';
+        var data = {"username": username};
+        $.ajax({
+			type: 'POST',
+			url: url,
+            data: data,
+			success: function(response){
+                user.loggedin = true;
+                user.name = username;
+                user.id = response.userId;
+
+                getCategories();
+            }
+		});
+    });
+
+    $('#categories').on('click','span', function(){
+        categoryAction = ($(this).hasClass('label-default')) ? 'POST' : 'DELETE';
+        var url = 'http://localhost:3010/interests/'+encodeURIComponent($(this).text())+'?userId='+user.id;
+
+        $.ajax({
+            type: categoryAction,
+            url: url,
+            success: function(response){
+                console.log(response);
+
+                getCategories();
+            }
+        });
+    });
+
+    $('#articles').on('click','article', function(){
+        categoryAction = ($(this).attr('bookmarked')==='false') ? 'POST' : 'DELETE';
+        var url = 'http://localhost:3010/bookmarks/'+$(this).attr('id')+'?userId='+user.id;
+
+        $.ajax({
+            type: categoryAction,
+            url: url,
+            success: function(response){
+                console.log(response);
+
+                getCategories();
+            }
+        });
+    });
 });
+
+function getCategories() {
+    var url = 'http://localhost:3010/categories?userId='+user.id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response){
+            categories = response;
+
+            getFeed();
+        }
+    });
+}
+/*function getInterests() {
+    var url = 'http://localhost:3010/interests?userId='+user.id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response){
+            console.log('Interests='+response);
+
+            getFeed();
+        }
+    });
+}*/
+
+function getFeed() {
+    var url = 'http://localhost:3010/feed?userId='+user.id;
+
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function(response){
+            articles = response;
+
+            renderView();
+        }
+    });
+}
