@@ -49,6 +49,7 @@ function setup() {
   // Event Listeners
   $('#loginContainer').on('click', '#loginSubmit', login);
   $('#categories').on('click', 'span', toggleInterest);
+  $('#main').on('click', 'article', toggleBookmark);
 }
 
 function login() {
@@ -75,12 +76,38 @@ function toggleInterest() {
       type: 'DELETE',
       url: url,
       success: function() {
-        // load updated categories and feed, rerender
+        loadCategories();
+        loadArticles();
       }
     });
   } else {
     $.post(url, function() {
-      // load updated categories and feed, rerender
+      loadCategories();
+      loadArticles();
+    });
+  }
+}
+
+function toggleBookmark() {
+  var articleIndex = $(this).index();
+  var article = model.articles[articleIndex];
+  var articleId = article.id;
+  var bookmarked = article.bookmarked;
+  var url = '/bookmarks/' + articleId + '?userId=' + model.userId;
+
+  if (bookmarked) {
+    $.ajax({
+      type: 'DELETE',
+      url: url,
+      success: function() {
+        loadCategories();
+        loadArticles();
+      }
+    });
+  } else {
+    $.post(url, function() {
+      loadCategories();
+      loadArticles();
     });
   }
 }
@@ -93,7 +120,10 @@ function loadCategories() {
 }
 
 function loadArticles() {
-  // TODO
+  $.get('/feed?userId=' + model.userId, function(data) {
+    model.articles = data;
+    renderArticles();
+  });
 }
 
 $(document).ready(setup);
