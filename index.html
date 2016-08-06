@@ -54,16 +54,16 @@
       <!--CATEGORIES TEMPLATE-->
       <script id='categories-template' type='text/x-handlebars-template'>
         {{#each categories}}
-        <span class="label {{#if selected}}label-primary {{else}}label-default{{/if}}">{{name}}</span>
+        <span data-name="{{name}}" class="label {{#if selected}}label-primary {{else}}label-default{{/if}}">{{name}}</span>
         {{/each}}
       </script>
 
       <!--ARTICLES TEMPLATE-->
       <script id='articles-template' type='text/x-handlebars-template'>
       {{#each articles}}
-        <article class="article row">
+        <article data-id="{{id}}" class="article row">
           <section class="featuredImage col-sm-2">
-          <img src={{imageUrl}}>
+          <img src="{{imageUrl}}">
           </section>
           <section class="articleContent col-sm-8">
             <a target="_blank" href="{{url}}"><h3>{{title}}</h3></a>

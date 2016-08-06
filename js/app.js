@@ -5,40 +5,8 @@ var model = {
 	username: '',
 	access_token: '',
 	loggedIn: false,
-	categories: [
-	{
-		name: 'memes',
-		selected: false
-	},
-	{
-		name: 'design',
-		selected: true
-	}
-	],
-	articles: [
-	{
-	id: -595284414,
-    title: 'MashReads Podcast: "Listen to Me" takes you on the road trip from your nightmares',
-    url: 'http://mashable.com/2016/07/20/listen-to-me-mashreads-podcast/',
-    imageUrl: 'http://i.amz.mshcdn.com/qSwzoAgsMSJbfaSuY5dj_JKaLAM=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F150784%2Flisten-to-me.jpg',
-    description: 'Buckle up!',
-    category: 'entertainment',
-    date: '',
-    source: 'Mashable',
-    bookmarked: false
-	},
-	{
-	id: -092835902,
-	title: 'Indian musician sisters give Sia\'s "Cheap Thrills" a soulful instrumental remix',
-	url: 'http://mashable.com/2016/07/21/cheap-thrills-veena-cover/',
-	imageUrl: 'http://i.amz.mshcdn.com/wB2HLbw1XpLwzQBnaQivWm-KD_4=/950x534/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fstory%2Fthumbnail%2F15170%2Fsddefault.jpg',
-	description: '"Cheap Thrills" like you\'ve never heard before.',
-	category: 'entertainment',
-	date: '',
-	source: 'Mashable',
-	bookmarked: true
-	}
-	]
+	categories: [],
+	articles: []
 };
 
 //view
@@ -81,6 +49,7 @@ function renderLogin() {
 	//event listeners
 	$('#loginContainer').on('click', '#loginSubmit', processLogin);
 	$('#categories').on('click', 'span', toggleCategories);
+	$('#main').on('click', 'article', toggleBookmarks);
 
 
 	function processLogin() {
@@ -95,23 +64,87 @@ function renderLogin() {
 		model.userId = loginResponse.userId;
 		model.loggedIn = true;
 		renderLogin();
+		getCategories();
+		getArticles();
 	});
+	}	
+	
+	function getCategories() {
+			var url = '/categories?userId=';
+			var user = model.userId;
 
-	//get categories & feed for this user, rerender
+			$.get(url + user, function(response) {
+				model.categories = response;
+				renderCategories();
+			});
+			
+		}
 
+	function getArticles() {
+		var user = model.userId;
+		var url = '/feed?userId=';
+
+			$.get(url + user, function(response) {
+				model.articles = response;
+				renderArticles();
+			});
+		}
+
+
+	function toggleCategories() {
+		var categoryName = $(this).attr('data-name');
+		var selected = $(this).hasClass('label-primary');
+		var user = model.userId;
+		var url = '/interests/'+categoryName+'?userId='+user;
+
+		if (selected) {
+			$.ajax({
+				type: 'DELETE',
+				url: url,
+				success: function(){
+					getCategories();
+					getArticles();
+				}
+			});
+		} else {
+			$.post(url, function(){
+				getCategories();
+				getArticles();
+
+			});
+		}
 
 	}
-	
 
-		//get username
 
-		//process login
+	function toggleBookmarks() {
+		var articleIndex = $(this).index(); //couldn't get this to work using $(this).attr()
+  		var article = model.articles[articleIndex];
+  		var articleId = article.id;
+		var bookmarked = article.bookmarked;
+		var user = model.userId;
+		var url = '/bookmarks/'+articleId+'?userId='+user;
 
-		//first render
+		console.log(articleId);
+
+		if (bookmarked) {
+			$.ajax({
+				type: 'DELETE',
+				url: url,
+				success: function(){
+					getArticles();
+				}
+			});
+		} else {
+			$.post(url, function(){
+				getArticles();
+			});
+		}
+
+	}
+
+
 		
-
-		renderArticles();
-		renderCategories();
 	});
 
 
